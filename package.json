@@ -1,0 +1,36 @@
+{
+  "name": "nexo-texcontrol",
+  "private": true,
+  "version": "0.1.0",
+  "description": "NeXo TexControl — demo del sistema de gestión para fabricación y venta de uniformes",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c blue,green \"npm run dev -w @nexo/api\" \"npm run dev -w @nexo/web\"",
+    "build": "npm run build -w @nexo/web",
+    "build:web": "npm run build -w @nexo/web",
+    "start:api": "npm run start -w @nexo/api",
+    "db:generate": "npm run db:generate -w @nexo/api",
+    "db:seed": "npm run db:seed -w @nexo/api",
+    "db:reset": "npm run db:reset -w @nexo/api",
+    "typecheck": "tsc -p packages/shared && tsc -p apps/api && tsc -p apps/web",
+    "test": "vitest run",
+    "test:flows": "node tests/api-flows.mjs",
+    "screens": "node tests/screens.mjs",
+    "db:check": "npm run db:check -w @nexo/api",
+    "test:security": "node tests/security-fuzz.mjs",
+    "test:load": "node tests/load-test.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0",
+    "playwright": "^1.65.1",
+    "typescript": "~5.9.0",
+    "vitest": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "type": "module"
+}

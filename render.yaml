@@ -1,0 +1,26 @@
+# Blueprint de Render para la API (Express + Drizzle). La base de datos es Neon (PostgreSQL).
+services:
+  - type: web
+    name: texcontrol-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm run start:api
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL
+        sync: false # Pegar la cadena de conexión de Neon (con ?sslmode=require)
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DEMO_PASSWORD
+        sync: false
+      - key: AUTO_SEED
+        value: "true"
+      - key: DEMO_MODE
+        value: "true" # SOLO para la demo. En un piloto real: "false" (quita el acceso sin contraseña)
+      - key: TRUST_PROXY
+        value: "2" # Vercel + Render

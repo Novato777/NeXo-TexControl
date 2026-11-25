@@ -1,0 +1,238 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------
+   Design tokens — TexControl
+   Base lino claro, tinta navy, primario azul petróleo.
+   Acentos vivos solo para orientar: teal (positivo), verde (confirmado),
+   naranja (advertencia), rojo (riesgo / error).
+------------------------------------------------------------------- */
+@theme {
+  --font-sans: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --color-linen: #f5f6f3;
+  --color-surface: #ffffff;
+  --color-ink: #1c2a39;
+  --color-ink-soft: #3c4b5b;
+  --color-muted: #5f6e7d;
+  --color-line: #e1e5e8;
+  --color-line-strong: #c9d0d6;
+
+  --color-petrol-50: #eaf4f6;
+  --color-petrol-100: #cfe6ec;
+  --color-petrol-200: #9fcbd7;
+  --color-petrol-500: #13708a;
+  --color-petrol-600: #0b5c73;
+  --color-petrol-700: #094a5d;
+  --color-petrol-800: #073a49;
+
+  --color-teal-50: #e6f6f5;
+  --color-teal-500: #0e9f9a;
+  --color-teal-700: #0a6f6b;
+
+  --color-ok-50: #e9f6ee;
+  --color-ok-500: #1f8a4c;
+  --color-ok-700: #166438;
+
+  --color-warn-50: #fdf2e6;
+  --color-warn-500: #c96a12;
+  --color-warn-700: #8f4a0b;
+
+  --color-risk-50: #fcecea;
+  --color-risk-500: #c2372d;
+  --color-risk-700: #8e2620;
+
+  --color-violet-50: #f1effb;
+  --color-violet-500: #6750c7;
+  --color-violet-700: #4a3896;
+
+  --radius-btn: 10px;
+  --radius-card: 14px;
+  --radius-field: 9px;
+
+  --shadow-card: 0 1px 2px rgb(28 42 57 / 0.05), 0 2px 8px -2px rgb(28 42 57 / 0.06);
+  --shadow-pop: 0 12px 32px -8px rgb(28 42 57 / 0.25), 0 2px 6px rgb(28 42 57 / 0.08);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-linen text-ink antialiased;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    font-feature-settings: 'tnum' 1;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply text-ink;
+    letter-spacing: -0.01em;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-teal-500);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  ::selection {
+    background: var(--color-petrol-100);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
+   La costura: línea punteada tipo puntada de máquina.
+   Es el único elemento decorativo del sistema; se usa para el ítem activo
+   del menú, los pasos del asistente y el avance de producción.
+------------------------------------------------------------------- */
+@layer components {
+  .stitch-x {
+    background-image: linear-gradient(90deg, currentColor 0 60%, transparent 60% 100%);
+    background-size: 9px 2px;
+    background-repeat: repeat-x;
+    height: 2px;
+  }
+  .stitch-y {
+    background-image: linear-gradient(180deg, currentColor 0 60%, transparent 60% 100%);
+    background-size: 2px 9px;
+    background-repeat: repeat-y;
+    width: 2px;
+  }
+  .stitch-border {
+    border: 2px dashed var(--color-line-strong);
+  }
+
+  /* Cinta métrica: barra de avance con marcas cada 10% */
+  .tape {
+    position: relative;
+    height: 12px;
+    border-radius: 999px;
+    background: var(--color-petrol-50);
+    overflow: hidden;
+  }
+  .tape::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(90deg, transparent 0 calc(10% - 1px), rgb(28 42 57 / 0.18) calc(10% - 1px) 10%);
+    pointer-events: none;
+  }
+  .tape > span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  .card {
+    @apply bg-surface border border-line;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+  }
+
+  .num {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  /* Tablas legibles */
+  .table-base {
+    @apply w-full text-left text-[14.5px];
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .table-base thead th {
+    @apply bg-linen text-muted font-semibold text-[13px] px-4 py-2.5 border-b border-line whitespace-nowrap;
+  }
+  .table-base thead th:first-child {
+    border-top-left-radius: 10px;
+  }
+  .table-base thead th:last-child {
+    border-top-right-radius: 10px;
+  }
+  .table-base tbody td {
+    @apply px-4 py-3 border-b border-line align-middle;
+  }
+  .table-base tbody tr:last-child td {
+    @apply border-b-0;
+  }
+  .table-base tbody tr.row-link {
+    @apply cursor-pointer;
+  }
+  .table-base tbody tr.row-link:hover td {
+    @apply bg-petrol-50/60;
+  }
+}
+
+/* Impresión de comprobantes */
+@media print {
+  body {
+    background: #fff;
+    font-size: 12px;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-sheet {
+    box-shadow: none !important;
+    border: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+}
+
+@keyframes toast-in {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes panel-in {
+  from {
+    transform: translateY(10px) scale(0.985);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes drawer-in {
+  from {
+    transform: translateX(24px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes activity {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
